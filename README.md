@@ -71,6 +71,16 @@ print(a, b, c)
 
 # >>> vector(1, 0, 0) vector(1, 2, 0) vector(1, 2, 3)
 ```
+* 두 point 객체를 잇는 벡터 생성
+```python
+a = point(1, 2, 3)
+b = point(2, -3, 1)
+ab = vector.to_vector(a, b)
+print(ab)
+
+# >>> vector(1, -5, 2)
+```
+
 * 수치 연산
     * 벡터합
     ```python
