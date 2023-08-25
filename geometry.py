@@ -5,13 +5,13 @@ from math import acos, degrees, fabs, sin, sqrt
 class point:
     def __init__(self, x=0, y=0, z=0):
         if isinstance(x, (list, tuple, point)):
-            if len(x) == 1:
+            if len(x) == 1: # 1D
                 _cv = [x[0], 0, 0]
                 x, y, z = _cv
-            elif len(x) == 2:
+            elif len(x) == 2: # 2D
                 _cv = [x[0], x[1], 0]
                 x, y, z = _cv
-            elif len(x) == 3:
+            elif len(x) == 3: # 3D
                 _cv = [x[0], x[1], x[2]]
                 x, y, z = _cv
         self.v = [x, y, z]
@@ -45,6 +45,22 @@ class point:
         if not isinstance(other, point):
             raise TypeError
         return self.v == other.v
+
+    def __lt__(self, other):
+        if self.z < other.z:
+            return True
+        elif self.z > other.z:
+            return False
+        else:
+            if self.y < other.y:
+                return True
+            elif self.y > other.y:
+                return False
+            else:
+                if self.x < other.x:
+                    return True
+                else:
+                    return False
 
     def __ne__(self, other):
         if not isinstance(other, point):
@@ -252,6 +268,9 @@ class vector:
             raise TypeError
         return sum(v_x*v_y for (v_x, v_y) in zip(self, other))
 
+    def one():
+        return vector(1, 1, 1)
+
     def reverse(self):
         return vector(-self.x, -self.y, -self.z)
 
@@ -265,4 +284,52 @@ class vector:
     def zero():
         return vector(0, 0, 0)
 
+class tools:
+    def area(pset): # calculate area of convex polygon(only 2D)
+        if len(pset) != len(tools.find_hull(pset)):
+            return
+        
+        area = 0
+        xset, yset, zset = zip(*pset)
+        if any(zset):
+            return
+        
+        xset, yset = list(xset), list(yset)
+        xset.append(xset[0])
+        yset.append(yset[0])
 
+        for i in range(len(pset)):
+            area += xset[i]*yset[i+1] - xset[i+1]*yset[i]
+
+        return abs(area/2)
+
+    '''
+    def dot_to_line(p, cd1, cd2):
+        hyp = ((cd1[0]-cd2[0])**2 + (cd1[1]-cd2[1])**2)**0.5
+        area = abs(p[0]*(cd2[1]-cd1[1]) - p[1]*(cd2[0]-cd1[0]) + cross(cd1, cd2))
+        return area / hyp
+    '''
+    
+    def find_hull(pset):
+        upper = []; lower = []
+
+        for i in sorted(pset):
+            while len(upper) > 1 and point.ccw(upper[-2], upper[-1], i) <= 0:
+                upper.pop()
+            upper.append(i)
+            while len(lower) > 1 and point.ccw(lower[-2], lower[-1], i) >= 0:
+                lower.pop()
+            lower.append(i)
+
+        return upper+lower[-2:0:-1]
+
+    def in_one_line():
+        ...
+
+def test():
+    n = int(input())
+
+    lst = []
+    for i in range(n):
+        a, b = map(int, input().split())
+        lst.append(point(a, b))
