@@ -268,6 +268,12 @@ class vector:
             raise TypeError
         return sum(v_x*v_y for (v_x, v_y) in zip(self, other))
 
+    def is_unit(self):
+        if self.size() == 1:
+            return True
+        else:
+            return False
+
     def one():
         return vector(1, 1, 1)
 
@@ -285,7 +291,8 @@ class vector:
         return vector(0, 0, 0)
 
 class tools:
-    def area(pset): # calculate area of convex polygon(only 2D)
+    # calculate area of convex polygon(only 2D)
+    def area(pset):
         if len(pset) != len(tools.find_hull(pset)):
             return
         
@@ -302,14 +309,14 @@ class tools:
             area += xset[i]*yset[i+1] - xset[i+1]*yset[i]
 
         return abs(area/2)
-
-    '''
-    def dot_to_line(p, cd1, cd2):
-        hyp = ((cd1[0]-cd2[0])**2 + (cd1[1]-cd2[1])**2)**0.5
-        area = abs(p[0]*(cd2[1]-cd1[1]) - p[1]*(cd2[0]-cd1[0]) + cross(cd1, cd2))
-        return area / hyp
-    '''
     
+    # calculate distance from dot(p) to line(ab)
+    def dot_to_line(p, a, b): 
+        hyp = sqrt((a.x-b.x)**2 + (a.y-b.y)**2)
+        area = abs(p.x*(b.y-a.y) - p.y*(b.x-a.x) + cross(a, b))
+        return area / hyp
+
+    # find convex hull of points set
     def find_hull(pset):
         upper = []; lower = []
 
@@ -323,12 +330,12 @@ class tools:
 
         return upper+lower[-2:0:-1]
 
-    def in_one_line():
+    # determine if all points exist on a single line
+    def in_one_line(pset):
         ...
 
 def test():
     n = int(input())
-
     lst = []
     for i in range(n):
         a, b = map(int, input().split())
