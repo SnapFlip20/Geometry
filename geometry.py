@@ -1,4 +1,5 @@
 #-*- coding:utf-8 -*-
+# point / vectpr structure by SnapFlip20
 
 from math import acos, degrees, fabs, sin, sqrt
 
@@ -112,6 +113,9 @@ class point:
 
     def flipxyz(self):
         return point(-self.x, -self.y, -self.z)
+    
+    def mid(a, b):
+        return point((a.x+b.x)/2, (a.y+b.y)/2, (a.z+b.z)/2)
 
     def move(self, value_x=0, value_y=0, value_z=0):
         return point(self.x+value_x, self.y+value_y, self.z+value_z)
@@ -313,7 +317,7 @@ class tools:
     # calculate distance from dot(p) to line(ab)
     def dot_to_line(p, a, b): 
         hyp = sqrt((a.x-b.x)**2 + (a.y-b.y)**2)
-        area = abs(p.x*(b.y-a.y) - p.y*(b.x-a.x) + cross(a, b))
+        area = abs(p.x*(b.y-a.y) - p.y*(b.x-a.x) + vector.cross(a, b))
         return area / hyp
 
     # find convex hull of points set
