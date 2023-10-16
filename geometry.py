@@ -1,5 +1,5 @@
 #-*- coding:utf-8 -*-
-# point / vectpr structure by SnapFlip20
+# point / vector structure by SnapFlip20
 
 from math import acos, degrees, fabs, sin, sqrt
 
@@ -21,12 +21,16 @@ class point:
         self.z = z
 
     @classmethod
-    def invert(cls, v):
+    def __invert(cls, v):
         if not isinstance(v, list):
             raise TypeError
         cv = cls()
         cv.v = v
         return cv
+    
+    @staticmethod
+    def info():
+        print('this object is point.')
 
     def __repr__(self):
         comp = ', '.join([repr(x) for x in self.v])
@@ -87,7 +91,7 @@ class point:
     def dist(a, b):
         return sqrt((a.x-b.x)**2 + (a.y-b.y)**2 + (a.z-b.z)**2)
 
-    def dist2(a, b):
+    def dist_pow(a, b):
         return (a.x-b.x)**2 + (a.y-b.y)**2 + (a.z-b.z)**2
 
     def dist_taxi(a, b):
@@ -111,7 +115,7 @@ class point:
     def flipyz(self):
         return point(self.x, -self.y, -self.z)
 
-    def flipxyz(self):
+    def flipxyz(self): # same as -(self)
         return point(-self.x, -self.y, -self.z)
     
     def mid(a, b):
@@ -158,12 +162,16 @@ class vector:
         self.z = z
     
     @classmethod
-    def invert(cls, v):
+    def __invert(cls, v):
         if not isinstance(v, list):
             raise TypeError
         cv = cls()
         cv.v = v
         return cv
+    
+    @staticmethod
+    def info():
+        print('this object is vector.')
 
     def __repr__(self):
         comp = ', '.join([repr(x) for x in self.v])
@@ -273,15 +281,12 @@ class vector:
         return sum(v_x*v_y for (v_x, v_y) in zip(self, other))
 
     def is_unit(self):
-        if self.size() == 1:
-            return True
-        else:
-            return False
+        return self.size() == 1
 
     def one():
         return vector(1, 1, 1)
 
-    def reverse(self):
+    def reverse(self): # same as -(self)
         return vector(-self.x, -self.y, -self.z)
 
     def size(self):
